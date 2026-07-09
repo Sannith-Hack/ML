@@ -1,0 +1,152 @@
+2026-07-09 20:16:00,029 | INFO     | __main__ | ============================================================
+2026-07-09 20:16:00,030 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:16:00,030 | INFO     | __main__ | ============================================================
+2026-07-09 20:16:18,479 | ERROR    | __main__ | Missing dependencies: customtkinter, scikit-learn, xgboost, seaborn, shap
+2026-07-09 20:16:18,479 | ERROR    | __main__ | Run:  pip install -r requirements.txt
+2026-07-09 20:16:22,566 | INFO     | __main__ | ============================================================
+2026-07-09 20:16:22,566 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:16:22,566 | INFO     | __main__ | ============================================================
+2026-07-09 20:16:24,849 | ERROR    | __main__ | Missing dependencies: customtkinter, scikit-learn, xgboost, seaborn, shap
+2026-07-09 20:16:24,849 | ERROR    | __main__ | Run:  pip install -r requirements.txt
+2026-07-09 20:17:22,258 | INFO     | __main__ | ============================================================
+2026-07-09 20:17:22,258 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:17:22,258 | INFO     | __main__ | ============================================================
+2026-07-09 20:17:37,920 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:17:37,926 | INFO     | modules.gui.theme | HECAR dark theme applied.
+2026-07-09 20:17:39,268 | ERROR    | modules.gui.app | Could not import screen class 'HomeScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:39,268 | ERROR    | modules.gui.app | Unknown screen: home
+2026-07-09 20:17:39,268 | INFO     | modules.gui.app | HECARApp initialised.
+2026-07-09 20:17:39,268 | INFO     | __main__ | Application started successfully.
+2026-07-09 20:17:39,269 | INFO     | modules.gui.app | Entering mainloop.
+2026-07-09 20:17:44,491 | ERROR    | modules.gui.app | Could not import screen class 'UploadScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:44,491 | ERROR    | modules.gui.app | Unknown screen: upload
+2026-07-09 20:17:46,098 | ERROR    | modules.gui.app | Could not import screen class 'HomeScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:46,098 | ERROR    | modules.gui.app | Unknown screen: home
+2026-07-09 20:17:47,020 | ERROR    | modules.gui.app | Could not import screen class 'PreprocessScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:47,020 | ERROR    | modules.gui.app | Unknown screen: preprocess
+2026-07-09 20:17:47,595 | ERROR    | modules.gui.app | Could not import screen class 'TrainScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:47,595 | ERROR    | modules.gui.app | Unknown screen: train
+2026-07-09 20:17:48,076 | ERROR    | modules.gui.app | Could not import screen class 'ClinicalScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:48,076 | ERROR    | modules.gui.app | Unknown screen: clinical
+2026-07-09 20:17:48,515 | ERROR    | modules.gui.app | Could not import screen class 'PredictScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:48,515 | ERROR    | modules.gui.app | Unknown screen: predict
+2026-07-09 20:17:48,963 | ERROR    | modules.gui.app | Could not import screen class 'ResultsScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:48,963 | ERROR    | modules.gui.app | Unknown screen: results
+2026-07-09 20:17:49,491 | ERROR    | modules.gui.app | Could not import screen class 'ReportScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:49,491 | ERROR    | modules.gui.app | Unknown screen: report
+2026-07-09 20:17:50,532 | ERROR    | modules.gui.app | Could not import screen class 'HomeScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:17:50,533 | ERROR    | modules.gui.app | Unknown screen: home
+2026-07-09 20:18:20,995 | ERROR    | modules.gui.app | Could not import screen class 'UploadScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:20,995 | ERROR    | modules.gui.app | Unknown screen: upload
+2026-07-09 20:18:21,618 | ERROR    | modules.gui.app | Could not import screen class 'PreprocessScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:21,618 | ERROR    | modules.gui.app | Unknown screen: preprocess
+2026-07-09 20:18:22,139 | ERROR    | modules.gui.app | Could not import screen class 'TrainScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:22,139 | ERROR    | modules.gui.app | Unknown screen: train
+2026-07-09 20:18:22,586 | ERROR    | modules.gui.app | Could not import screen class 'ClinicalScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:22,586 | ERROR    | modules.gui.app | Unknown screen: clinical
+2026-07-09 20:18:23,090 | ERROR    | modules.gui.app | Could not import screen class 'PredictScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:23,090 | ERROR    | modules.gui.app | Unknown screen: predict
+2026-07-09 20:18:23,554 | ERROR    | modules.gui.app | Could not import screen class 'ResultsScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:23,554 | ERROR    | modules.gui.app | Unknown screen: results
+2026-07-09 20:18:23,971 | ERROR    | modules.gui.app | Could not import screen class 'ReportScreen': No module named 'modules.gui.screens.train_screen'
+2026-07-09 20:18:23,971 | ERROR    | modules.gui.app | Unknown screen: report
+2026-07-09 20:18:54,924 | INFO     | __main__ | Application closed by user.
+2026-07-09 20:18:54,924 | INFO     | __main__ | HECAR Framework shut down.
+2026-07-09 20:19:16,399 | INFO     | __main__ | ============================================================
+2026-07-09 20:19:16,399 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:19:16,399 | INFO     | __main__ | ============================================================
+2026-07-09 20:19:19,272 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:19:19,275 | CRITICAL | __main__ | Failed to import GUI module: cannot import name 'color' from 'modules.gui.theme' (E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\modules\gui\theme.py)
+2026-07-09 20:21:16,014 | INFO     | __main__ | ============================================================
+2026-07-09 20:21:16,014 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:21:16,014 | INFO     | __main__ | ============================================================
+2026-07-09 20:21:19,037 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:21:44,374 | INFO     | __main__ | ============================================================
+2026-07-09 20:21:44,374 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:21:44,374 | INFO     | __main__ | ============================================================
+2026-07-09 20:21:47,308 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:22:08,004 | INFO     | __main__ | ============================================================
+2026-07-09 20:22:08,005 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:22:08,005 | INFO     | __main__ | ============================================================
+2026-07-09 20:22:11,005 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:22:12,275 | INFO     | __main__ | Application started successfully.
+2026-07-09 20:22:27,622 | INFO     | __main__ | ============================================================
+2026-07-09 20:22:27,623 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:22:27,623 | INFO     | __main__ | ============================================================
+2026-07-09 20:22:30,495 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:22:31,322 | INFO     | __main__ | Application started successfully.
+2026-07-09 20:26:19,933 | INFO     | modules.explainability.shap_explainer | SHAP plot saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\shap_plot.png
+2026-07-09 20:26:29,807 | INFO     | modules.explainability.report_generator | Report generated at E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\report_20260709_202629.html
+2026-07-09 20:30:25,412 | INFO     | modules.explainability.shap_explainer | SHAP plot saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\shap_plot.png
+2026-07-09 20:33:57,577 | INFO     | modules.feature_engineering.dataset_builder | Building dataset from folder: E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:33:57,926 | INFO     | modules.pdf_processor.pdf_loader | Loaded 32 PDFs from E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:33:57,934 | INFO     | modules.feature_engineering.dataset_builder | Built dataset with 32 records.
+2026-07-09 20:34:21,161 | INFO     | modules.feature_engineering.dataset_builder | Building dataset from folder: E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:34:21,504 | INFO     | modules.pdf_processor.pdf_loader | Loaded 32 PDFs from E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:34:21,509 | INFO     | modules.feature_engineering.dataset_builder | Built dataset with 32 records.
+2026-07-09 20:34:23,498 | INFO     | modules.feature_engineering.dataset_builder | Augmenting dataset to balance classes...
+2026-07-09 20:34:23,512 | INFO     | modules.feature_engineering.dataset_builder | Augmented dataset size: 82 records.
+2026-07-09 20:34:28,668 | INFO     | modules.feature_engineering.dataset_builder | Dataset saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\processed\hecar_dataset.csv
+2026-07-09 20:34:34,150 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:34:43,739 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:34:58,273 | INFO     | modules.feature_engineering.dataset_builder | Building dataset from folder: E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:34:58,645 | INFO     | modules.pdf_processor.pdf_loader | Loaded 32 PDFs from E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:34:58,652 | INFO     | modules.feature_engineering.dataset_builder | Built dataset with 32 records.
+2026-07-09 20:35:00,169 | INFO     | modules.feature_engineering.dataset_builder | Augmenting dataset to balance classes...
+2026-07-09 20:35:00,182 | INFO     | modules.feature_engineering.dataset_builder | Augmented dataset size: 82 records.
+2026-07-09 20:35:08,954 | INFO     | modules.feature_engineering.dataset_builder | Dataset saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\processed\hecar_dataset.csv
+2026-07-09 20:36:05,166 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:37:35,308 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:37:38,097 | INFO     | modules.feature_engineering.dataset_builder | Building dataset from folder: E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:37:38,456 | INFO     | modules.pdf_processor.pdf_loader | Loaded 32 PDFs from E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:37:38,462 | INFO     | modules.feature_engineering.dataset_builder | Built dataset with 32 records.
+2026-07-09 20:37:39,409 | INFO     | modules.feature_engineering.dataset_builder | Augmenting dataset to balance classes...
+2026-07-09 20:37:39,418 | INFO     | modules.feature_engineering.dataset_builder | Augmented dataset size: 82 records.
+2026-07-09 20:37:41,242 | INFO     | modules.feature_engineering.dataset_builder | Dataset saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\processed\hecar_dataset.csv
+2026-07-09 20:37:44,389 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:38:00,584 | INFO     | __main__ | Application closed by user.
+2026-07-09 20:38:00,585 | INFO     | __main__ | HECAR Framework shut down.
+2026-07-09 20:38:19,105 | INFO     | __main__ | ============================================================
+2026-07-09 20:38:19,105 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:38:19,105 | INFO     | __main__ | ============================================================
+2026-07-09 20:38:22,081 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:38:22,919 | INFO     | __main__ | Application started successfully.
+2026-07-09 20:38:25,849 | INFO     | modules.feature_engineering.dataset_builder | Building dataset from folder: E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:38:26,216 | INFO     | modules.pdf_processor.pdf_loader | Loaded 32 PDFs from E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:38:26,223 | INFO     | modules.feature_engineering.dataset_builder | Built dataset with 32 records.
+2026-07-09 20:38:27,296 | INFO     | modules.feature_engineering.dataset_builder | Augmenting dataset to balance classes...
+2026-07-09 20:38:27,308 | INFO     | modules.feature_engineering.dataset_builder | Augmented dataset size: 82 records.
+2026-07-09 20:38:31,371 | INFO     | modules.feature_engineering.dataset_builder | Dataset saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\processed\hecar_dataset.csv
+2026-07-09 20:38:38,579 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:38:43,803 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:39:06,041 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:39:11,081 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:39:28,253 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:39:33,008 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:39:46,955 | INFO     | __main__ | HECAR Framework shut down.
+2026-07-09 20:39:50,631 | INFO     | __main__ | ============================================================
+2026-07-09 20:39:50,631 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-09 20:39:50,631 | INFO     | __main__ | ============================================================
+2026-07-09 20:39:53,678 | INFO     | __main__ | All core dependencies verified.
+2026-07-09 20:39:54,502 | INFO     | __main__ | Application started successfully.
+2026-07-09 20:39:58,073 | INFO     | modules.feature_engineering.dataset_builder | Building dataset from folder: E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:39:58,432 | INFO     | modules.pdf_processor.pdf_loader | Loaded 32 PDFs from E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\ECG-REPORTS-DATA-TRICOG
+2026-07-09 20:39:58,440 | INFO     | modules.feature_engineering.dataset_builder | Built dataset with 32 records.
+2026-07-09 20:39:59,216 | INFO     | modules.feature_engineering.dataset_builder | Augmenting dataset to balance classes...
+2026-07-09 20:39:59,228 | INFO     | modules.feature_engineering.dataset_builder | Augmented dataset size: 82 records.
+2026-07-09 20:40:00,948 | INFO     | modules.feature_engineering.dataset_builder | Dataset saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\processed\hecar_dataset.csv
+2026-07-09 20:40:04,862 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:40:09,556 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:40:09,556 | INFO     | modules.models.model_manager | History saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\history\cnn_bilstm_history.json
+2026-07-09 20:40:43,303 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:40:47,874 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:40:47,875 | INFO     | modules.models.model_manager | History saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\history\cnn_bilstm_history.json
+2026-07-09 20:54:43,965 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:54:49,110 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:54:49,111 | INFO     | modules.models.model_manager | History saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\history\cnn_bilstm_history.json
+2026-07-09 20:54:59,831 | INFO     | modules.models.cnn_bilstm | CNN-BiLSTM model built successfully.
+2026-07-09 20:55:06,999 | INFO     | modules.models.model_manager | Keras model saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\saved\cnn_bilstm.keras
+2026-07-09 20:55:06,999 | INFO     | modules.models.model_manager | History saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\model\history\cnn_bilstm_history.json
+2026-07-09 21:02:29,222 | INFO     | modules.explainability.shap_explainer | SHAP plot saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\shap_plot.png
+2026-07-09 21:04:31,183 | INFO     | modules.explainability.report_generator | Report generated at E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\report_20260709_210431.html
+2026-07-09 21:12:59,340 | INFO     | __main__ | HECAR Framework shut down.
