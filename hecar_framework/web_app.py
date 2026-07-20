@@ -42,9 +42,32 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling
+# Custom Styling & Watermark Removal
 st.markdown("""
 <style>
+    /* Hide Profile Picture / Viewer Badge at Bottom Right Corner */
+    #viewerBadge,
+    [data-testid="stViewerBadge"],
+    div[class*="viewerBadge"],
+    .viewerBadge_container,
+    iframe[title="Streamlit Viewer Badge"],
+    [data-testid="stStatusWidget"],
+    #stDecoration {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
+    /* Hide Streamlit Footer ("Made with Streamlit") & Deploy Buttons */
+    footer,
+    [data-testid="stFooter"],
+    [data-testid="stAppDeployButton"],
+    #MainMenu {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Custom App Styling */
     .main-title {
         font-size: 2.2rem;
         font-weight: 700;
