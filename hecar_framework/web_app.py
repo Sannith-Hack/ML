@@ -3,7 +3,7 @@ HECAR Framework — Streamlit Clinical Web Application
 ======================================================
 Hybrid ECG PDF-Based Arrhythmia Classification and Cardiovascular Risk Prediction Suite.
 Features top-level responsive navigation (no sidebar required on mobile), dark glassmorphism
-medical design system, synchronized session state management, and multi-modal diagnostic workflows.
+medical design system, synchronized session state callbacks, and multi-modal diagnostic workflows.
 """
 
 import os
@@ -260,13 +260,111 @@ def get_tricog_samples():
         return [s.name for s in pdf_files]
     return []
 
-# Navigation Helpers for Synchronized State Switching
+# ── ATOMIC NAVIGATION & PRESET CALLBACKS (Runs strictly BEFORE widget instantiation to prevent API exceptions) ──
 def set_stage(new_stage):
     st.session_state["workflow_stage"] = new_stage
     st.session_state["top_workflow_stage"] = new_stage
 
 def on_stage_change():
     st.session_state["workflow_stage"] = st.session_state["top_workflow_stage"]
+
+def go_step2():
+    set_stage("2. 🩺 Patient Clinical Data")
+
+def go_step3():
+    # Save current clinical input state right before transitioning to Step 3
+    st.session_state["clinical_data"] = {
+        "age": st.session_state.get("clin_age", 55),
+        "gender": st.session_state.get("clin_gender", "Male"),
+        "bp_systolic": st.session_state.get("clin_sys", 130),
+        "bp_diastolic": st.session_state.get("clin_dia", 85),
+        "bmi": st.session_state.get("clin_bmi", 24.5),
+        "hba1c": st.session_state.get("clin_hba1c", 5.6),
+        "cholesterol": st.session_state.get("clin_chol", 190),
+        "physical_activity": st.session_state.get("clin_act", "Moderate"),
+        "smoking": st.session_state.get("clin_smoke", False),
+        "alcohol": st.session_state.get("clin_alc", False),
+        "diabetes": st.session_state.get("clin_diab", False),
+        "hypertension": st.session_state.get("clin_hyp", False),
+        "heart_disease": st.session_state.get("clin_heart", False),
+        "stroke": st.session_state.get("clin_stroke", False),
+        "family_history": st.session_state.get("clin_fam", False)
+    }
+    set_stage("3. 🧠 Run AI Diagnosis")
+
+def go_step4():
+    set_stage("4. 📄 Clinical Report")
+
+def reset_session():
+    st.session_state["ecg_metadata"] = {}
+    st.session_state["clinical_data"] = {}
+    st.session_state["arrhythmia_result"] = None
+    st.session_state["risk_results"] = None
+    st.session_state["shap_chart_path"] = None
+    st.session_state["report_path"] = None
+    set_stage("1. 📁 Upload & Extract ECG")
+
+def save_clinical():
+    st.session_state["clinical_data"] = {
+        "age": st.session_state.get("clin_age", 55),
+        "gender": st.session_state.get("clin_gender", "Male"),
+        "bp_systolic": st.session_state.get("clin_sys", 130),
+        "bp_diastolic": st.session_state.get("clin_dia", 85),
+        "bmi": st.session_state.get("clin_bmi", 24.5),
+        "hba1c": st.session_state.get("clin_hba1c", 5.6),
+        "cholesterol": st.session_state.get("clin_chol", 190),
+        "physical_activity": st.session_state.get("clin_act", "Moderate"),
+        "smoking": st.session_state.get("clin_smoke", False),
+        "alcohol": st.session_state.get("clin_alc", False),
+        "diabetes": st.session_state.get("clin_diab", False),
+        "hypertension": st.session_state.get("clin_hyp", False),
+        "heart_disease": st.session_state.get("clin_heart", False),
+        "stroke": st.session_state.get("clin_stroke", False),
+        "family_history": st.session_state.get("clin_fam", False)
+    }
+    st.toast("✅ Clinical variables saved successfully!")
+
+def apply_preset(p_type):
+    if p_type == "high":
+        p_data = {
+            "age": 68, "gender": "Male", "bp_systolic": 160, "bp_diastolic": 98,
+            "bmi": 31.2, "hba1c": 8.1, "cholesterol": 255, "smoking": True,
+            "alcohol": True, "physical_activity": "Low", "diabetes": True,
+            "hypertension": True, "heart_disease": True, "stroke": False,
+            "family_history": True
+        }
+    elif p_type == "med":
+        p_data = {
+            "age": 54, "gender": "Female", "bp_systolic": 138, "bp_diastolic": 88,
+            "bmi": 26.8, "hba1c": 6.2, "cholesterol": 215, "smoking": False,
+            "alcohol": True, "physical_activity": "Moderate", "diabetes": False,
+            "hypertension": True, "heart_disease": False, "stroke": False,
+            "family_history": True
+        }
+    else:
+        p_data = {
+            "age": 35, "gender": "Male", "bp_systolic": 118, "bp_diastolic": 76,
+            "bmi": 22.4, "hba1c": 5.2, "cholesterol": 175, "smoking": False,
+            "alcohol": False, "physical_activity": "High", "diabetes": False,
+            "hypertension": False, "heart_disease": False, "stroke": False,
+            "family_history": False
+        }
+    st.session_state["clinical_data"] = p_data
+    st.session_state["clin_age"] = int(p_data["age"])
+    st.session_state["clin_gender"] = p_data["gender"]
+    st.session_state["clin_sys"] = int(p_data["bp_systolic"])
+    st.session_state["clin_dia"] = int(p_data["bp_diastolic"])
+    st.session_state["clin_bmi"] = float(p_data["bmi"])
+    st.session_state["clin_hba1c"] = float(p_data["hba1c"])
+    st.session_state["clin_chol"] = int(p_data["cholesterol"])
+    st.session_state["clin_act"] = p_data["physical_activity"]
+    st.session_state["clin_smoke"] = bool(p_data["smoking"])
+    st.session_state["clin_alc"] = bool(p_data["alcohol"])
+    st.session_state["clin_diab"] = bool(p_data["diabetes"])
+    st.session_state["clin_hyp"] = bool(p_data["hypertension"])
+    st.session_state["clin_heart"] = bool(p_data["heart_disease"])
+    st.session_state["clin_stroke"] = bool(p_data["stroke"])
+    st.session_state["clin_fam"] = bool(p_data["family_history"])
 
 # ── TOP-LEVEL & SIDEBAR SYNCHRONIZED NAVIGATION ──
 STAGE_OPTIONS = [
@@ -310,15 +408,6 @@ else:
     st.sidebar.info("**AI Diagnosis:** Pending")
 
 st.sidebar.divider()
-def reset_session():
-    st.session_state["ecg_metadata"] = {}
-    st.session_state["clinical_data"] = {}
-    st.session_state["arrhythmia_result"] = None
-    st.session_state["risk_results"] = None
-    st.session_state["shap_chart_path"] = None
-    st.session_state["report_path"] = None
-    set_stage("1. 📁 Upload & Extract ECG")
-
 st.sidebar.button("🔄 Reset Diagnostic Session", type="secondary", use_container_width=True, on_click=reset_session)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -396,9 +485,7 @@ if step == "1. 📁 Upload & Extract ECG":
         
         st.write("")
         st.write("")
-        if st.button("➔ Proceed to Step 2: Patient Clinical Data", type="primary", use_container_width=True, key="proceed_to_step2_btn"):
-            set_stage("2. 🩺 Patient Clinical Data")
-            st.rerun()
+        st.button("➔ Proceed to Step 2: Patient Clinical Data", type="primary", use_container_width=True, key="proceed_to_step2_btn", on_click=go_step2)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 2: PATIENT CLINICAL DATA
@@ -409,60 +496,15 @@ elif step == "2. 🩺 Patient Clinical Data":
     
     meta = st.session_state.get("ecg_metadata", {})
     current_clin = st.session_state.get("clinical_data", {})
-    
-    def load_preset(preset_data):
-        st.session_state["clinical_data"] = preset_data
-        st.session_state["clin_age"] = int(preset_data["age"])
-        st.session_state["clin_gender"] = preset_data["gender"]
-        st.session_state["clin_sys"] = int(preset_data["bp_systolic"])
-        st.session_state["clin_dia"] = int(preset_data["bp_diastolic"])
-        st.session_state["clin_bmi"] = float(preset_data["bmi"])
-        st.session_state["clin_hba1c"] = float(preset_data["hba1c"])
-        st.session_state["clin_chol"] = int(preset_data["cholesterol"])
-        st.session_state["clin_act"] = preset_data["physical_activity"]
-        st.session_state["clin_smoke"] = bool(preset_data["smoking"])
-        st.session_state["clin_alc"] = bool(preset_data["alcohol"])
-        st.session_state["clin_diab"] = bool(preset_data["diabetes"])
-        st.session_state["clin_hyp"] = bool(preset_data["hypertension"])
-        st.session_state["clin_heart"] = bool(preset_data["heart_disease"])
-        st.session_state["clin_stroke"] = bool(preset_data["stroke"])
-        st.session_state["clin_fam"] = bool(preset_data["family_history"])
 
     st.markdown("#### Quick Profile Presets")
     col_p1, col_p2, col_p3 = st.columns(3)
     with col_p1:
-        if st.button("🔴 Load High-Risk CAD / Stroke Profile", use_container_width=True, key="preset_high_btn"):
-            load_preset({
-                "age": 68, "gender": "Male", "bp_systolic": 160, "bp_diastolic": 98,
-                "bmi": 31.2, "hba1c": 8.1, "cholesterol": 255, "smoking": True,
-                "alcohol": True, "physical_activity": "Low", "diabetes": True,
-                "hypertension": True, "heart_disease": True, "stroke": False,
-                "family_history": True
-            })
-            st.success("High-risk profile loaded across all fields!")
-            st.rerun()
+        st.button("🔴 Load High-Risk CAD / Stroke Profile", use_container_width=True, key="preset_high_btn", on_click=apply_preset, args=("high",))
     with col_p2:
-        if st.button("🟡 Load Moderate Risk Patient Profile", use_container_width=True, key="preset_med_btn"):
-            load_preset({
-                "age": 54, "gender": "Female", "bp_systolic": 138, "bp_diastolic": 88,
-                "bmi": 26.8, "hba1c": 6.2, "cholesterol": 215, "smoking": False,
-                "alcohol": True, "physical_activity": "Moderate", "diabetes": False,
-                "hypertension": True, "heart_disease": False, "stroke": False,
-                "family_history": True
-            })
-            st.success("Moderate-risk profile loaded across all fields!")
-            st.rerun()
+        st.button("🟡 Load Moderate Risk Patient Profile", use_container_width=True, key="preset_med_btn", on_click=apply_preset, args=("med",))
     with col_p3:
-        if st.button("🟢 Load Normal Healthy Patient Profile", use_container_width=True, key="preset_low_btn"):
-            load_preset({
-                "age": 35, "gender": "Male", "bp_systolic": 118, "bp_diastolic": 76,
-                "bmi": 22.4, "hba1c": 5.2, "cholesterol": 175, "smoking": False,
-                "alcohol": False, "physical_activity": "High", "diabetes": False,
-                "hypertension": False, "heart_disease": False, "stroke": False,
-                "family_history": False
-            })
-            st.success("Normal profile loaded across all fields!")
-            st.rerun()
+        st.button("🟢 Load Normal Healthy Patient Profile", use_container_width=True, key="preset_low_btn", on_click=apply_preset, args=("low",))
 
     st.write("")
     col1, col2, col3 = st.columns(3)
@@ -493,24 +535,9 @@ elif step == "2. 🩺 Patient Clinical Data":
     st.write("")
     col_save, col_next = st.columns([1, 1])
     with col_save:
-        if st.button("💾 Save Clinical Variables", type="secondary", use_container_width=True, key="save_clin_btn"):
-            st.session_state["clinical_data"] = {
-                "age": age, "gender": gender, "bp_systolic": bp_systolic, "bp_diastolic": bp_diastolic,
-                "bmi": bmi, "hba1c": hba1c, "cholesterol": cholesterol, "physical_activity": physical_activity,
-                "smoking": smoking, "alcohol": alcohol, "diabetes": diabetes, "hypertension": hypertension,
-                "heart_disease": heart_disease, "stroke": stroke, "family_history": family_history
-            }
-            st.success("✅ Clinical variables stored securely!")
+        st.button("💾 Save Clinical Variables", type="secondary", use_container_width=True, key="save_clin_btn", on_click=save_clinical)
     with col_next:
-        if st.button("➔ Save & Proceed to Step 3: Run AI Diagnosis", type="primary", use_container_width=True, key="next_to_diag_btn"):
-            st.session_state["clinical_data"] = {
-                "age": age, "gender": gender, "bp_systolic": bp_systolic, "bp_diastolic": bp_diastolic,
-                "bmi": bmi, "hba1c": hba1c, "cholesterol": cholesterol, "physical_activity": physical_activity,
-                "smoking": smoking, "alcohol": alcohol, "diabetes": diabetes, "hypertension": hypertension,
-                "heart_disease": heart_disease, "stroke": stroke, "family_history": family_history
-            }
-            set_stage("3. 🧠 Run AI Diagnosis")
-            st.rerun()
+        st.button("➔ Save & Proceed to Step 3: Run AI Diagnosis", type="primary", use_container_width=True, key="next_to_diag_btn", on_click=go_step3)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 3: RUN AI DIAGNOSIS
@@ -658,9 +685,7 @@ elif step == "3. 🧠 Run AI Diagnosis":
             st.image(st.session_state["shap_chart_path"], use_container_width=True)
 
         st.write("")
-        if st.button("➔ Proceed to Step 4: Generate Clinical Report", type="primary", use_container_width=True, key="to_step4_btn"):
-            set_stage("4. 📄 Clinical Report")
-            st.rerun()
+        st.button("➔ Proceed to Step 4: Generate Clinical Report", type="primary", use_container_width=True, key="to_step4_btn", on_click=go_step4)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 4: CLINICAL REPORT
