@@ -51,17 +51,37 @@ st.set_page_config(
 # Custom Styling & Watermark Removal
 st.markdown("""
 <style>
-    /* Hide Profile Picture / Viewer Badge at Bottom Right Corner */
+    /* Hide Profile Picture / Viewer Badge / App Badge on Desktop & Mobile */
     #viewerBadge,
+    #appBadge,
     [data-testid="stViewerBadge"],
-    div[class*="viewerBadge"],
-    .viewerBadge_container,
-    iframe[title="Streamlit Viewer Badge"],
+    [data-testid="stAppBadge"],
+    [data-testid="stCloudBadge"],
     [data-testid="stStatusWidget"],
-    #stDecoration {
+    div[class*="viewerBadge"],
+    div[class*="ViewerBadge"],
+    div[class*="appBadge"],
+    div[class*="AppBadge"],
+    div[class*="hostedWithStreamlit"],
+    div[class*="createdBy"],
+    .viewerBadge_container,
+    .appBadge_container,
+    #stDecoration,
+    /* Target all Streamlit Cloud injected bottom/corner iframes and badges */
+    iframe[title*="Badge"],
+    iframe[title*="badge"],
+    iframe[src*="badge"],
+    iframe[src*="streamlit.io"],
+    iframe[style*="position: fixed"],
+    iframe[style*="bottom"],
+    a[href*="streamlit.io/cloud"],
+    a[href*="share.streamlit.io"] {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
     }
 
     /* Hide Streamlit Footer ("Made with Streamlit") & Deploy Buttons */
