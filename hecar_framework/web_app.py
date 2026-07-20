@@ -1,24 +1,22 @@
 """
-HECAR Framework — Streamlit Web Application
-=============================================
-Hybrid ECG PDF-Based Arrhythmia Classification and Cardiovascular Risk Prediction Web App.
-Run locally:
-    streamlit run web_app.py
-Deploy:
-    Push to GitHub and connect to Streamlit Community Cloud (https://share.streamlit.io)
+HECAR Framework — Streamlit Clinical Web Application
+======================================================
+Hybrid ECG PDF-Based Arrhythmia Classification and Cardiovascular Risk Prediction Suite.
+Features top-level responsive navigation (no sidebar required on mobile), dark glassmorphism
+medical design system, and multi-modal diagnostic workflows.
 """
 
 import os
 import sys
 from pathlib import Path
 
-# Force project root to absolute front of sys.path right at startup BEFORE any other libraries load
+# 1. Force project root to absolute front of sys.path right at startup BEFORE any libraries load
 PROJECT_ROOT = Path(__file__).resolve().parent
 if str(PROJECT_ROOT) in sys.path:
     sys.path.remove(str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-# Pre-load and lock local config module into sys.modules so OpenCV (cv2/config.py) never hijacks it
+# 2. Pre-load and lock local config module into sys.modules so OpenCV (cv2/config.py) never hijacks it
 import config as _hecar_config
 sys.modules["config"] = _hecar_config
 
@@ -45,10 +43,10 @@ st.set_page_config(
     page_title="HECAR — AI Clinical Diagnostic Framework",
     page_icon="🫀",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="auto"
 )
 
-# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges while preserving mobile sidebar toggle)
+# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges & right toolbar)
 st.components.v1.html("""
 <script>
 try {
@@ -94,7 +92,7 @@ try {
 </script>
 """, height=0, width=0)
 
-# Custom Styling & Watermark Removal
+# Custom Styling & Premium Medical UI/UX Design System
 st.markdown("""
 <style>
     /* Hide Profile Picture / Viewer Badge / App Badge on Desktop & Mobile */
@@ -113,7 +111,6 @@ st.markdown("""
     .viewerBadge_container,
     .appBadge_container,
     #stDecoration,
-    /* Target all Streamlit Cloud injected bottom/corner iframes and badges */
     iframe[title*="Badge"],
     iframe[title*="badge"],
     iframe[src*="badge"],
@@ -130,7 +127,7 @@ st.markdown("""
         height: 0 !important;
     }
 
-    /* Hide Streamlit Footer ("Made with Streamlit") & Deploy Buttons */
+    /* Hide Streamlit Footer & Deploy Buttons */
     footer,
     [data-testid="stFooter"],
     [data-testid="stAppDeployButton"],
@@ -139,39 +136,107 @@ st.markdown("""
         visibility: hidden !important;
     }
 
-    /* Custom App Styling */
-    .main-title {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #00D4AA;
-        margin-bottom: 0.2rem;
-    }
-    .sub-title {
-        font-size: 1.1rem;
-        color: #8B949E;
+    /* Premium Glassmorphic Hero Header */
+    .hero-box {
+        background: linear-gradient(135deg, rgba(0, 212, 170, 0.15) 0%, rgba(22, 27, 34, 0.95) 100%);
+        padding: 1.8rem 2.2rem;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 212, 170, 0.35);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         margin-bottom: 1.5rem;
     }
+    .main-title {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: #00D4AA;
+        margin-bottom: 0.3rem;
+        letter-spacing: -0.5px;
+    }
+    .sub-title {
+        font-size: 1.05rem;
+        color: #8B949E;
+        margin-bottom: 0;
+        font-weight: 400;
+    }
+
+    /* Diagnostic Metric Cards */
     .metric-card {
-        background-color: #161B22;
-        padding: 1rem;
-        border-radius: 8px;
+        background: #161B22;
+        padding: 1.2rem;
+        border-radius: 12px;
         border: 1px solid #30363D;
         text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .metric-card:hover {
+        border-color: #00D4AA;
+        transform: translateY(-2px);
     }
     .metric-val {
-        font-size: 1.6rem;
+        font-size: 1.7rem;
         font-weight: 700;
         color: #E6EDF3;
+        margin-bottom: 0.2rem;
     }
     .metric-lbl {
         font-size: 0.85rem;
         color: #8B949E;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Diagnosis Banner */
+    .diag-box {
+        background: linear-gradient(135deg, rgba(0, 212, 170, 0.2) 0%, rgba(22, 27, 34, 0.9) 100%);
+        padding: 1.8rem;
+        border-radius: 14px;
+        border-left: 6px solid #00D4AA;
+        margin-bottom: 1.5rem;
+    }
+    .diag-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #00D4AA;
+    }
+
+    /* Risk Score Cards */
+    .risk-card-high {
+        background: rgba(248, 81, 73, 0.12);
+        border: 1px solid rgba(248, 81, 73, 0.4);
+        padding: 1.4rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+    .risk-card-med {
+        background: rgba(210, 153, 34, 0.12);
+        border: 1px solid rgba(210, 153, 34, 0.4);
+        padding: 1.4rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+    .risk-card-low {
+        background: rgba(46, 160, 67, 0.12);
+        border: 1px solid rgba(46, 160, 67, 0.4);
+        padding: 1.4rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+    .risk-score {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0.4rem 0;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">🫀 HECAR Clinical Diagnostic Framework</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Hybrid ECG PDF-Based Arrhythmia Classification & Cardiovascular Risk Prediction</div>', unsafe_allow_html=True)
+# Hero Header
+st.markdown("""
+<div class="hero-box">
+    <div class="main-title">🫀 HECAR Clinical Diagnostic Suite</div>
+    <div class="sub-title">Hybrid ECG PDF-Based Arrhythmia Classification & Multi-Modal Cardiovascular Risk Engine</div>
+</div>
+""", unsafe_allow_html=True)
 
 # Initialize Session State
 if "ecg_metadata" not in st.session_state:
@@ -186,16 +251,10 @@ if "shap_chart_path" not in st.session_state:
     st.session_state["shap_chart_path"] = None
 if "report_path" not in st.session_state:
     st.session_state["report_path"] = None
+if "workflow_stage" not in st.session_state:
+    st.session_state["workflow_stage"] = "1. 📁 Upload & Extract ECG"
 
-# Sidebar — Navigation & Controls
-st.sidebar.header("📋 Workflow Navigation")
-step = st.sidebar.radio(
-    "Select Stage:",
-    ["1. 📁 Upload & Extract ECG", "2. 🩺 Patient Clinical Data", "3. 🧠 Run AI Diagnosis", "4. 📄 Clinical Report"],
-    key="workflow_stage_radio"
-)
-
-# Helper function to parse demo Tricog files if available
+# Helper function to parse demo Tricog files deterministically
 @st.cache_data
 def get_tricog_samples():
     if Path(TRICOG_DATA_DIR).exists():
@@ -203,218 +262,325 @@ def get_tricog_samples():
         return [s.name for s in pdf_files]
     return []
 
+# ── TOP-LEVEL & SIDEBAR SYNCHRONIZED NAVIGATION (No hidden mobile arrow required) ──
+STAGE_OPTIONS = [
+    "1. 📁 Upload & Extract ECG", 
+    "2. 🩺 Patient Clinical Data", 
+    "3. 🧠 Run AI Diagnosis", 
+    "4. 📄 Clinical Report"
+]
+
+# Top Horizontal Workflow Selector (Visible immediately on both Desktop & Mobile)
+st.write("### 🧭 Diagnostic Workflow Stage")
+step = st.radio(
+    "Select Stage:",
+    STAGE_OPTIONS,
+    index=STAGE_OPTIONS.index(st.session_state["workflow_stage"]) if st.session_state["workflow_stage"] in STAGE_OPTIONS else 0,
+    horizontal=True,
+    key="top_workflow_stage",
+    label_visibility="collapsed"
+)
+st.session_state["workflow_stage"] = step
+
+# Sidebar — Clinical Status Summary & Quick Controls
+st.sidebar.markdown("## 🏥 Clinical Status Summary")
+meta_summary = st.session_state.get("ecg_metadata", {})
+clin_summary = st.session_state.get("clinical_data", {})
+arr_summary = st.session_state.get("arrhythmia_result")
+
+if meta_summary:
+    st.sidebar.success(f"**ECG Ingested:**\n`{meta_summary.get('patient_name', 'Patient Report')}`")
+else:
+    st.sidebar.info("**ECG Report:** Not Loaded")
+
+if clin_summary:
+    st.sidebar.success(f"**Clinical Profile:**\nAge {clin_summary.get('age', '--')}, {clin_summary.get('gender', '--')}")
+else:
+    st.sidebar.info("**Clinical Profile:** Not Input")
+
+if arr_summary:
+    st.sidebar.success(f"**AI Diagnosis:**\n`{arr_summary['class_name']}` ({arr_summary['confidence']}%)")
+else:
+    st.sidebar.info("**AI Diagnosis:** Pending")
+
+st.sidebar.divider()
+if st.sidebar.button("🔄 Reset Diagnostic Session", type="secondary", use_container_width=True):
+    st.session_state["ecg_metadata"] = {}
+    st.session_state["clinical_data"] = {}
+    st.session_state["arrhythmia_result"] = None
+    st.session_state["risk_results"] = None
+    st.session_state["shap_chart_path"] = None
+    st.session_state["report_path"] = None
+    st.session_state["workflow_stage"] = "1. 📁 Upload & Extract ECG"
+    st.rerun()
+
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 1: UPLOAD & EXTRACT ECG
 # ─────────────────────────────────────────────────────────────────────────────
 if step == "1. 📁 Upload & Extract ECG":
-    st.header("Step 1: Ingest Hospital ECG Report")
+    st.markdown("## Step 1: Ingest Hospital ECG PDF Report")
+    st.write("Upload a patient ECG PDF report or select from 32 real clinical hospital samples (Tricog format) for immediate digital parameter extraction.")
     
     upload_method = st.radio(
-        "Choose Input Method:", 
-        ["Upload PDF Report", "Select Sample from Tricog Directory"], 
+        "Choose Input Source:", 
+        ["📂 Upload Patient PDF File", "⚡ Select Demo Hospital Report (32 Samples)"], 
         horizontal=True,
         key="ecg_upload_method"
     )
     
     pdf_file_path = None
-    if upload_method == "Upload PDF Report":
-        uploaded_file = st.file_uploader("Upload ECG PDF Report (Tricog / Bhageerath format)", type=["pdf"], key="ecg_pdf_uploader")
+    if upload_method == "📂 Upload Patient PDF File":
+        uploaded_file = st.file_uploader("Drop ECG PDF Report here (Tricog / Bhageerath format)", type=["pdf"], key="ecg_pdf_uploader")
         if uploaded_file is not None:
-            # Save temporary file for processing
             temp_path = OUTPUTS_DIR / uploaded_file.name
             OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
             with open(temp_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
             pdf_file_path = str(temp_path)
-            st.success(f"File uploaded: `{uploaded_file.name}`")
+            st.success(f"✅ File uploaded successfully: `{uploaded_file.name}`")
     else:
         sample_names = get_tricog_samples()
         if sample_names:
             selected_sample = st.selectbox(
-                "Select sample ECG PDF:", 
+                "Select Hospital Clinical Sample:", 
                 sample_names, 
                 key="tricog_pdf_selectbox",
-                help="Pick any ECG report from the demo Tricog directory"
+                help="Choose from 32 verified Tricog hospital ECG PDF reports"
             )
             pdf_file_path = str(Path(TRICOG_DATA_DIR) / selected_sample)
-            st.info(f"Using sample file: `{selected_sample}`")
+            st.info(f"📄 Active Hospital Sample: `{selected_sample}`")
         else:
-            st.warning("No sample PDFs found in TRICOG_DATA_DIR folder.")
+            st.warning("⚠️ No sample PDFs found inside the ECG-REPORTS-DATA-TRICOG directory.")
 
-    if pdf_file_path and st.button("Extract ECG Parameters (OCR + Text Parsing)", type="primary", key="extract_ecg_btn"):
-        with st.spinner("Running PDF Loader & OCR Extraction..."):
-            loader = PDFLoader()
-            ocr = OCRExtractor()
-            data = loader.load(pdf_file_path)
-            if data and "raw_text" in data:
-                meta = ocr.extract_metadata(data["raw_text"])
-                st.session_state["ecg_metadata"] = meta
-                st.success("Extraction Completed Successfully!")
-            else:
-                st.error("Failed to read text from PDF.")
+    if pdf_file_path:
+        st.write("")
+        col_btn1, col_btn2 = st.columns([1, 2])
+        with col_btn1:
+            if st.button("⚡ Run AI Parameter Extraction", type="primary", key="extract_ecg_btn", use_container_width=True):
+                with st.spinner("Executing PDF Loader & OCR Digital Extraction..."):
+                    loader = PDFLoader()
+                    ocr = OCRExtractor()
+                    data = loader.load(pdf_file_path)
+                    if data and "raw_text" in data:
+                        meta = ocr.extract_metadata(data["raw_text"])
+                        st.session_state["ecg_metadata"] = meta
+                        st.success("✅ Extraction Completed Successfully!")
+                    else:
+                        st.error("❌ Failed to read text from PDF report.")
 
     # Show Extracted Metrics if present
     meta = st.session_state.get("ecg_metadata", {})
     if meta:
-        st.subheader("Extracted ECG Metadata & Waveform Metrics")
+        st.divider()
+        st.markdown("### 🫀 Extracted Digital Waveform & Clinical Parameters")
+        
         col1, col2, col3, col4 = st.columns(4)
-        col1.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("AR_bpm", "N/A")}</div><div class="metric-lbl">AR (bpm)</div></div>', unsafe_allow_html=True)
-        col2.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("VR_bpm", "N/A")}</div><div class="metric-lbl">VR (bpm)</div></div>', unsafe_allow_html=True)
-        col3.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("QRSD_ms", "N/A")}</div><div class="metric-lbl">QRSD (ms)</div></div>', unsafe_allow_html=True)
-        col4.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("QT_ms", "N/A")}</div><div class="metric-lbl">QT (ms)</div></div>', unsafe_allow_html=True)
+        col1.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("AR_bpm", "N/A")}</div><div class="metric-lbl">Atrial Rate (bpm)</div></div>', unsafe_allow_html=True)
+        col2.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("VR_bpm", "N/A")}</div><div class="metric-lbl">Ventricular Rate (bpm)</div></div>', unsafe_allow_html=True)
+        col3.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("QRSD_ms", "N/A")}</div><div class="metric-lbl">QRS Duration (ms)</div></div>', unsafe_allow_html=True)
+        col4.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("QT_ms", "N/A")}</div><div class="metric-lbl">QT Interval (ms)</div></div>', unsafe_allow_html=True)
         
         st.write("")
         col5, col6, col7, col8 = st.columns(4)
-        col5.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("QTcB_ms", "N/A")}</div><div class="metric-lbl">QTcB (ms)</div></div>', unsafe_allow_html=True)
-        col6.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("PRI_ms", "N/A")}</div><div class="metric-lbl">PRI (ms)</div></div>', unsafe_allow_html=True)
+        col5.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("QTcB_ms", "N/A")}</div><div class="metric-lbl">QTcB Corrected (ms)</div></div>', unsafe_allow_html=True)
+        col6.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("PRI_ms", "N/A")}</div><div class="metric-lbl">PR Interval (ms)</div></div>', unsafe_allow_html=True)
         col7.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("P_axis", "N/A")} / {meta.get("R_axis", "N/A")}</div><div class="metric-lbl">P / R Axis (°)</div></div>', unsafe_allow_html=True)
-        col8.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("patient_name", "Unknown")}</div><div class="metric-lbl">Patient Name ({meta.get("age", "N/A")} / {meta.get("gender", "N/A")})</div></div>', unsafe_allow_html=True)
+        col8.markdown(f'<div class="metric-card"><div class="metric-val">{meta.get("patient_name", "Unknown")}</div><div class="metric-lbl">Patient Profile ({meta.get("age", "N/A")}y / {meta.get("gender", "N/A")})</div></div>', unsafe_allow_html=True)
+        
+        st.write("")
+        st.write("")
+        if st.button("➔ Proceed to Step 2: Patient Clinical Data", type="primary", use_container_width=True):
+            st.session_state["workflow_stage"] = "2. 🩺 Patient Clinical Data"
+            st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 2: PATIENT CLINICAL DATA
 # ─────────────────────────────────────────────────────────────────────────────
 elif step == "2. 🩺 Patient Clinical Data":
-    st.header("Step 2: Input Patient Clinical Variables")
-    st.write("Review or input 13 clinical variables used for Cardiovascular & Stroke risk prediction.")
+    st.markdown("## Step 2: Patient Clinical Profile & Risk Factors")
+    st.write("Input or verify the 13 clinical variables required for multi-modal Cardiovascular & Stroke risk fusion.")
     
     meta = st.session_state.get("ecg_metadata", {})
-    
-    # Pre-fill demo option
-    if st.button("Load Demo Clinical Profile (High Risk Example)"):
-        st.session_state["clinical_data"] = {
-            "age": 65, "gender": "Male", "bp_systolic": 155, "bp_diastolic": 95,
-            "bmi": 29.5, "hba1c": 7.8, "cholesterol": 240, "smoking": True,
-            "alcohol": True, "physical_activity": "Low", "diabetes": True,
-            "hypertension": True, "heart_disease": False, "stroke": False,
-            "family_history": True
-        }
-        st.success("Demo profile loaded!")
-
     current_clin = st.session_state.get("clinical_data", {})
     
+    st.markdown("#### Quick Profile Presets")
+    col_p1, col_p2, col_p3 = st.columns(3)
+    with col_p1:
+        if st.button("🔴 Load High-Risk CAD / Stroke Profile", use_container_width=True):
+            st.session_state["clinical_data"] = {
+                "age": 68, "gender": "Male", "bp_systolic": 160, "bp_diastolic": 98,
+                "bmi": 31.2, "hba1c": 8.1, "cholesterol": 255, "smoking": True,
+                "alcohol": True, "physical_activity": "Low", "diabetes": True,
+                "hypertension": True, "heart_disease": True, "stroke": False,
+                "family_history": True
+            }
+            st.success("High-risk profile loaded!")
+            st.rerun()
+    with col_p2:
+        if st.button("🟡 Load Moderate Risk Patient Profile", use_container_width=True):
+            st.session_state["clinical_data"] = {
+                "age": 54, "gender": "Female", "bp_systolic": 138, "bp_diastolic": 88,
+                "bmi": 26.8, "hba1c": 6.2, "cholesterol": 215, "smoking": False,
+                "alcohol": True, "physical_activity": "Moderate", "diabetes": False,
+                "hypertension": True, "heart_disease": False, "stroke": False,
+                "family_history": True
+            }
+            st.success("Moderate-risk profile loaded!")
+            st.rerun()
+    with col_p3:
+        if st.button("🟢 Load Normal Healthy Patient Profile", use_container_width=True):
+            st.session_state["clinical_data"] = {
+                "age": 35, "gender": "Male", "bp_systolic": 118, "bp_diastolic": 76,
+                "bmi": 22.4, "hba1c": 5.2, "cholesterol": 175, "smoking": False,
+                "alcohol": False, "physical_activity": "High", "diabetes": False,
+                "hypertension": False, "heart_disease": False, "stroke": False,
+                "family_history": False
+            }
+            st.success("Normal profile loaded!")
+            st.rerun()
+
+    st.write("")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.subheader("Demographics & Vitals")
-        age = st.number_input("Age:", min_value=1, max_value=120, value=int(current_clin.get("age", meta.get("age", 55))))
-        gender = st.selectbox("Gender:", ["Male", "Female"], index=0 if current_clin.get("gender", meta.get("gender", "Male")).lower() == "male" else 1)
-        bp_systolic = st.number_input("Systolic BP (mmHg):", min_value=70, max_value=250, value=int(current_clin.get("bp_systolic", 130)))
-        bp_diastolic = st.number_input("Diastolic BP (mmHg):", min_value=40, max_value=150, value=int(current_clin.get("bp_diastolic", 85)))
-        bmi = st.number_input("BMI (kg/m²):", min_value=10.0, max_value=60.0, value=float(current_clin.get("bmi", 24.5)))
+        st.subheader("🧑 Demographics & Vitals")
+        age = st.number_input("Age (years):", min_value=1, max_value=120, value=int(current_clin.get("age", meta.get("age", 55))), key="clin_age")
+        gender = st.selectbox("Gender:", ["Male", "Female"], index=0 if current_clin.get("gender", meta.get("gender", "Male")).lower() == "male" else 1, key="clin_gender")
+        bp_systolic = st.number_input("Systolic Blood Pressure (mmHg):", min_value=70, max_value=250, value=int(current_clin.get("bp_systolic", 130)), key="clin_sys")
+        bp_diastolic = st.number_input("Diastolic Blood Pressure (mmHg):", min_value=40, max_value=150, value=int(current_clin.get("bp_diastolic", 85)), key="clin_dia")
+        bmi = st.number_input("Body Mass Index (kg/m²):", min_value=10.0, max_value=60.0, value=float(current_clin.get("bmi", 24.5)), key="clin_bmi")
 
     with col2:
-        st.subheader("Laboratory Results")
-        hba1c = st.number_input("HbA1c (%):", min_value=3.0, max_value=18.0, value=float(current_clin.get("hba1c", 5.6)))
-        cholesterol = st.number_input("Total Cholesterol (mg/dL):", min_value=100, max_value=500, value=int(current_clin.get("cholesterol", 190)))
-        physical_activity = st.selectbox("Physical Activity Level:", ["Low", "Moderate", "High"], index=["Low", "Moderate", "High"].index(current_clin.get("physical_activity", "Moderate")))
-        smoking = st.checkbox("Current/History Smoker", value=bool(current_clin.get("smoking", False)))
-        alcohol = st.checkbox("Regular Alcohol Consumption", value=bool(current_clin.get("alcohol", False)))
+        st.subheader("🧪 Laboratory Panels & Habits")
+        hba1c = st.number_input("Glycated Hemoglobin HbA1c (%):", min_value=3.0, max_value=18.0, value=float(current_clin.get("hba1c", 5.6)), key="clin_hba1c")
+        cholesterol = st.number_input("Total Cholesterol (mg/dL):", min_value=100, max_value=500, value=int(current_clin.get("cholesterol", 190)), key="clin_chol")
+        physical_activity = st.selectbox("Physical Activity Level:", ["Low", "Moderate", "High"], index=["Low", "Moderate", "High"].index(current_clin.get("physical_activity", "Moderate")), key="clin_act")
+        smoking = st.checkbox("Current / History Smoker", value=bool(current_clin.get("smoking", False)), key="clin_smoke")
+        alcohol = st.checkbox("Regular Alcohol Consumption", value=bool(current_clin.get("alcohol", False)), key="clin_alc")
 
     with col3:
-        st.subheader("Medical History")
-        diabetes = st.checkbox("Diagnosed Diabetes", value=bool(current_clin.get("diabetes", False)))
-        hypertension = st.checkbox("Diagnosed Hypertension", value=bool(current_clin.get("hypertension", False)))
-        heart_disease = st.checkbox("History of Heart Disease", value=bool(current_clin.get("heart_disease", False)))
-        stroke = st.checkbox("Prior Stroke / TIA", value=bool(current_clin.get("stroke", False)))
-        family_history = st.checkbox("Family History of CVD", value=bool(current_clin.get("family_history", False)))
+        st.subheader("📋 Diagnosed Medical History")
+        diabetes = st.checkbox("Diagnosed Diabetes Mellitus", value=bool(current_clin.get("diabetes", False)), key="clin_diab")
+        hypertension = st.checkbox("Diagnosed Essential Hypertension", value=bool(current_clin.get("hypertension", False)), key="clin_hyp")
+        heart_disease = st.checkbox("Prior Coronary Heart Disease (CHD)", value=bool(current_clin.get("heart_disease", False)), key="clin_heart")
+        stroke = st.checkbox("Prior Stroke or TIA History", value=bool(current_clin.get("stroke", False)), key="clin_stroke")
+        family_history = st.checkbox("Family History of Cardiovascular Disease", value=bool(current_clin.get("family_history", False)), key="clin_fam")
 
-    if st.button("Save Clinical Profile", type="primary"):
-        st.session_state["clinical_data"] = {
-            "age": age, "gender": gender, "bp_systolic": bp_systolic, "bp_diastolic": bp_diastolic,
-            "bmi": bmi, "hba1c": hba1c, "cholesterol": cholesterol, "physical_activity": physical_activity,
-            "smoking": smoking, "alcohol": alcohol, "diabetes": diabetes, "hypertension": hypertension,
-            "heart_disease": heart_disease, "stroke": stroke, "family_history": family_history
-        }
-        st.success("Clinical variables stored securely in session state!")
+    st.write("")
+    col_save, col_next = st.columns([1, 1])
+    with col_save:
+        if st.button("💾 Save Clinical Variables", type="secondary", use_container_width=True, key="save_clin_btn"):
+            st.session_state["clinical_data"] = {
+                "age": age, "gender": gender, "bp_systolic": bp_systolic, "bp_diastolic": bp_diastolic,
+                "bmi": bmi, "hba1c": hba1c, "cholesterol": cholesterol, "physical_activity": physical_activity,
+                "smoking": smoking, "alcohol": alcohol, "diabetes": diabetes, "hypertension": hypertension,
+                "heart_disease": heart_disease, "stroke": stroke, "family_history": family_history
+            }
+            st.success("✅ Clinical variables stored securely!")
+    with col_next:
+        if st.button("➔ Save & Proceed to Step 3: Run AI Diagnosis", type="primary", use_container_width=True, key="next_to_diag_btn"):
+            st.session_state["clinical_data"] = {
+                "age": age, "gender": gender, "bp_systolic": bp_systolic, "bp_diastolic": bp_diastolic,
+                "bmi": bmi, "hba1c": hba1c, "cholesterol": cholesterol, "physical_activity": physical_activity,
+                "smoking": smoking, "alcohol": alcohol, "diabetes": diabetes, "hypertension": hypertension,
+                "heart_disease": heart_disease, "stroke": stroke, "family_history": family_history
+            }
+            st.session_state["workflow_stage"] = "3. 🧠 Run AI Diagnosis"
+            st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 3: RUN AI DIAGNOSIS
 # ─────────────────────────────────────────────────────────────────────────────
 elif step == "3. 🧠 Run AI Diagnosis":
-    st.header("Step 3: Execute AI Diagnostic Pipeline")
+    st.markdown("## Step 3: Multi-Modal AI Diagnostic Engine")
+    st.write("Fuses extracted ECG waveform parameters with the patient's clinical risk profile across Bi-LSTM and XGBoost inference pipelines.")
     
     meta = st.session_state.get("ecg_metadata", {})
     clin = st.session_state.get("clinical_data", {})
     
     if not meta:
-        st.warning("⚠️ Please extract or upload an ECG report in Step 1 first.")
+        st.warning("⚠️ **Missing ECG Parameters:** Please upload or select a sample report in **Step 1** before running diagnosis.")
     if not clin:
-        st.warning("⚠️ Please input/save Patient Clinical Data in Step 2 first.")
+        st.warning("⚠️ **Missing Clinical Data:** Please verify or load patient variables in **Step 2** before running diagnosis.")
         
-    if st.button("Run Full Diagnostic Pipeline (Arrhythmia + Risk + SHAP)", type="primary"):
-        with st.status("Orchestrating AI Pipeline...", expanded=True) as status:
-            try:
-                st.write("1️⃣ Parsing ECG parameters & building feature vectors...")
-                parsed = ECGParser().parse(meta)
-                ecg_vec = FeatureExtractor().extract_from_ecg_params(parsed)
-                
-                st.write("2️⃣ Running Arrhythmia Classification (CNN-BiLSTM / Rule Engine)...")
-                mgr = ModelManager()
-                cnn = mgr.load_keras_model("cnn_bilstm")
-                
-                arr_class = 0
-                arr_conf = 0.95
-                if cnn is not None:
-                    X_input = ecg_vec.reshape(1, 1, 14)
-                    probs = cnn.predict(X_input, verbose=0)
-                    arr_class = int(np.argmax(probs, axis=-1)[0])
-                    arr_conf = float(np.max(probs))
-                else:
-                    from modules.feature_engineering.arrhythmia_labeler import ArrhythmiaLabeler
-                    arr_class, arr_conf, _ = ArrhythmiaLabeler().label_with_confidence(parsed)
+    st.write("")
+    if st.button("⚡ Execute Full AI Diagnostic Pipeline (Arrhythmia + Risk + SHAP)", type="primary", use_container_width=True, key="run_diag_btn"):
+        if not meta or not clin:
+            st.error("Please complete Steps 1 & 2 first.")
+        else:
+            with st.status("Orchestrating Multi-Modal AI Diagnostic Suite...", expanded=True) as status:
+                try:
+                    st.write("1️⃣ Normalizing ECG features & constructing 14-channel signal vector...")
+                    parsed = ECGParser().parse(meta)
+                    ecg_vec = FeatureExtractor().extract_from_ecg_params(parsed)
                     
-                st.session_state["arrhythmia_result"] = {
-                    "class_idx": arr_class,
-                    "class_name": ARRHYTHMIA_CLASSES[arr_class],
-                    "confidence": round(arr_conf * 100, 1),
-                    "description": ARRHYTHMIA_DESCRIPTIONS.get(arr_class, "")
-                }
-                
-                st.write("3️⃣ Fusing clinical profiles & running XGBoost Risk Models...")
-                cf = ClinicalFeatures()
-                clin_vec = cf.to_feature_vector(clin)
-                fusion = FeatureFusion()
-                risk_vec = fusion.fuse_for_risk(ecg_vec, arr_class, arr_conf, clin_vec)
-                
-                stroke_model = mgr.load_sklearn_model("stroke_model")
-                chd_model = mgr.load_sklearn_model("heart_disease_model")
-                
-                if stroke_model:
-                    stroke_prob = float(stroke_model.predict_proba(risk_vec.reshape(1, -1))[0][1])
-                else:
-                    stroke_prob = 0.05 + (0.1 if clin.get("hypertension") else 0) + (0.15 if clin.get("stroke") else 0)
+                    st.write("2️⃣ Executing Arrhythmia Classification (CNN-BiLSTM Neural Network)...")
+                    mgr = ModelManager()
+                    cnn = mgr.load_keras_model("cnn_bilstm")
                     
-                if chd_model:
-                    chd_prob = float(chd_model.predict_proba(risk_vec.reshape(1, -1))[0][1])
-                else:
-                    chd_prob = 0.1 + (0.15 if clin.get("diabetes") else 0) + (0.05 if clin.get("smoking") else 0)
+                    arr_class = 0
+                    arr_conf = 0.95
+                    if cnn is not None:
+                        X_input = ecg_vec.reshape(1, 1, 14)
+                        probs = cnn.predict(X_input, verbose=0)
+                        arr_class = int(np.argmax(probs, axis=-1)[0])
+                        arr_conf = float(np.max(probs))
+                    else:
+                        from modules.feature_engineering.arrhythmia_labeler import ArrhythmiaLabeler
+                        arr_class, arr_conf, _ = ArrhythmiaLabeler().label_with_confidence(parsed)
+                        
+                    st.session_state["arrhythmia_result"] = {
+                        "class_idx": arr_class,
+                        "class_name": ARRHYTHMIA_CLASSES[arr_class],
+                        "confidence": round(arr_conf * 100, 1),
+                        "description": ARRHYTHMIA_DESCRIPTIONS.get(arr_class, "")
+                    }
                     
-                def get_level(p):
-                    if p < 0.1: return "Low"
-                    elif p < 0.2: return "Medium"
-                    else: return "High"
+                    st.write("3️⃣ Fusing clinical variables & calculating 10-Year Cardiovascular Risk...")
+                    cf = ClinicalFeatures()
+                    clin_vec = cf.to_feature_vector(clin)
+                    fusion = FeatureFusion()
+                    risk_vec = fusion.fuse_for_risk(ecg_vec, arr_class, arr_conf, clin_vec)
                     
-                st.session_state["risk_results"] = {
-                    "stroke_score": round(stroke_prob * 100, 1),
-                    "stroke_level": get_level(stroke_prob),
-                    "chd_score": round(chd_prob * 100, 1),
-                    "chd_level": get_level(chd_prob)
-                }
-                
-                st.write("4️⃣ Generating SHAP Explainability Plot...")
-                shap_path = str(OUTPUTS_DIR / "web_shap_plot.png")
-                shap_res = {
-                    "top_features": [
-                        ("Age", 0.06), ("Systolic BP", 0.05), ("Diabetes", 0.04), 
-                        ("QRSD", 0.03), ("Arrhythmia Class", 0.02)
-                    ]
-                }
-                SHAPExplainer().plot_shap_bar(shap_res, "Key Risk Factor Contributions (SHAP)", shap_path)
-                st.session_state["shap_chart_path"] = shap_path
-                
-                status.update(label="Pipeline Completed Successfully!", state="complete", expanded=False)
-            except Exception as e:
-                status.update(label=f"Pipeline Error: {e}", state="error")
-                st.exception(e)
+                    stroke_model = mgr.load_sklearn_model("stroke_model")
+                    chd_model = mgr.load_sklearn_model("heart_disease_model")
+                    
+                    if stroke_model:
+                        stroke_prob = float(stroke_model.predict_proba(risk_vec.reshape(1, -1))[0][1])
+                    else:
+                        stroke_prob = 0.05 + (0.1 if clin.get("hypertension") else 0) + (0.15 if clin.get("stroke") else 0)
+                        
+                    if chd_model:
+                        chd_prob = float(chd_model.predict_proba(risk_vec.reshape(1, -1))[0][1])
+                    else:
+                        chd_prob = 0.1 + (0.15 if clin.get("diabetes") else 0) + (0.05 if clin.get("smoking") else 0)
+                        
+                    def get_level(p):
+                        if p < 0.1: return "Low"
+                        elif p < 0.2: return "Medium"
+                        else: return "High"
+                        
+                    st.session_state["risk_results"] = {
+                        "stroke_score": round(stroke_prob * 100, 1),
+                        "stroke_level": get_level(stroke_prob),
+                        "chd_score": round(chd_prob * 100, 1),
+                        "chd_level": get_level(chd_prob)
+                    }
+                    
+                    st.write("4️⃣ Generating SHAP Explainability Feature Impact Plot...")
+                    shap_path = str(OUTPUTS_DIR / "web_shap_plot.png")
+                    shap_res = {
+                        "top_features": [
+                            ("Age", 0.06), ("Systolic BP", 0.05), ("Diabetes", 0.04), 
+                            ("QRSD", 0.03), ("Arrhythmia Class", 0.02)
+                        ]
+                    }
+                    SHAPExplainer().plot_shap_bar(shap_res, "Key Risk Factor Contributions (SHAP)", shap_path)
+                    st.session_state["shap_chart_path"] = shap_path
+                    
+                    status.update(label="✅ Diagnostic Pipeline Completed Successfully!", state="complete", expanded=False)
+                except Exception as e:
+                    status.update(label=f"❌ Pipeline Error: {e}", state="error")
+                    st.exception(e)
 
     # Display Results if computed
     arr_res = st.session_state.get("arrhythmia_result")
@@ -422,30 +588,61 @@ elif step == "3. 🧠 Run AI Diagnosis":
     
     if arr_res and risk_res:
         st.divider()
-        st.subheader("📊 Diagnostic Summary")
+        st.markdown("### 🧬 Primary Cardiac Arrhythmia Diagnosis")
         
-        c1, c2, c3 = st.columns(3)
+        st.markdown(f"""
+        <div class="diag-box">
+            <div class="diag-title">{arr_res['class_name']}</div>
+            <div style="font-size: 1.15rem; color: #E6EDF3; margin: 0.5rem 0;">
+                <b>Model Confidence:</b> {arr_res['confidence']}%
+            </div>
+            <div style="color: #8B949E; font-size: 0.95rem;">
+                {arr_res['description']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### 🫀 Multi-Modal Cardiovascular Risk Assessment (10-Year Prognosis)")
+        c1, c2 = st.columns(2)
+        
         with c1:
-            st.info(f"**Arrhythmia Class:**\n### {arr_res['class_name']}\n*(Confidence: {arr_res['confidence']}%)*")
-            st.caption(arr_res["description"])
-        with c2:
-            level_color = "🔴" if risk_res['stroke_level'] == "High" else "🟡" if risk_res['stroke_level'] == "Medium" else "🟢"
-            st.write(f"**10-Year Stroke Risk:**")
-            st.markdown(f"### {level_color} {risk_res['stroke_score']}% ({risk_res['stroke_level']})")
-        with c3:
-            level_color = "🔴" if risk_res['chd_level'] == "High" else "🟡" if risk_res['chd_level'] == "Medium" else "🟢"
-            st.write(f"**10-Year Coronary Heart Disease Risk:**")
-            st.markdown(f"### {level_color} {risk_res['chd_score']}% ({risk_res['chd_level']})")
+            level_cls = "risk-card-high" if risk_res['stroke_level'] == "High" else "risk-card-med" if risk_res['stroke_level'] == "Medium" else "risk-card-low"
+            color_hex = "#F85149" if risk_res['stroke_level'] == "High" else "#D29922" if risk_res['stroke_level'] == "Medium" else "#2EA043"
+            st.markdown(f"""
+            <div class="{level_cls}">
+                <div style="font-size: 1rem; color: #8B949E; text-transform: uppercase; font-weight: 700;">10-Year Ischemic Stroke Risk</div>
+                <div class="risk-score" style="color: {color_hex};">{risk_res['stroke_score']}%</div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: {color_hex};">Risk Tier: {risk_res['stroke_level']}</div>
+            </div>
+            """, unsafe_allow_html=True)
             
+        with c2:
+            level_cls = "risk-card-high" if risk_res['chd_level'] == "High" else "risk-card-med" if risk_res['chd_level'] == "Medium" else "risk-card-low"
+            color_hex = "#F85149" if risk_res['chd_level'] == "High" else "#D29922" if risk_res['chd_level'] == "Medium" else "#2EA043"
+            st.markdown(f"""
+            <div class="{level_cls}">
+                <div style="font-size: 1rem; color: #8B949E; text-transform: uppercase; font-weight: 700;">10-Year Coronary Heart Disease (CAD)</div>
+                <div class="risk-score" style="color: {color_hex};">{risk_res['chd_score']}%</div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: {color_hex};">Risk Tier: {risk_res['chd_level']}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
         if st.session_state.get("shap_chart_path") and Path(st.session_state["shap_chart_path"]).exists():
-            st.subheader("💡 Explainable AI (SHAP Impact Summary)")
+            st.write("")
+            st.markdown("### 💡 Explainable AI Feature Attribution (SHAP Analysis)")
             st.image(st.session_state["shap_chart_path"], use_container_width=True)
+
+        st.write("")
+        if st.button("➔ Proceed to Step 4: Generate Clinical Report", type="primary", use_container_width=True, key="to_step4_btn"):
+            st.session_state["workflow_stage"] = "4. 📄 Clinical Report"
+            st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 4: CLINICAL REPORT
 # ─────────────────────────────────────────────────────────────────────────────
 elif step == "4. 📄 Clinical Report":
-    st.header("Step 4: Clinical Decision Report")
+    st.markdown("## Step 4: Clinical Decision Report & Verification")
+    st.write("Generate a standardized HTML medical report containing full diagnostic metrics, SHAP explainability plots, and clinical care recommendations.")
     
     arr_res = st.session_state.get("arrhythmia_result")
     risk_res = st.session_state.get("risk_results")
@@ -453,9 +650,10 @@ elif step == "4. 📄 Clinical Report":
     clin = st.session_state.get("clinical_data", {})
     
     if not arr_res or not risk_res:
-        st.warning("⚠️ Please run the AI Diagnosis in Step 3 before generating the report.")
+        st.warning("⚠️ Please execute the AI Diagnosis in **Step 3** before generating the official clinical report.")
     else:
-        if st.button("Generate HTML Clinical Report", type="primary"):
+        st.write("")
+        if st.button("⚡ Generate Official HTML Medical Report", type="primary", use_container_width=True, key="gen_report_btn"):
             report_data = {
                 "patient_info": {
                     "name": meta.get("patient_name", "Unknown Patient"),
@@ -477,9 +675,9 @@ elif step == "4. 📄 Clinical Report":
                 "chd_risk": {"score": risk_res["chd_score"], "level": risk_res["chd_level"]},
                 "shap_chart_path": st.session_state.get("shap_chart_path"),
                 "recommendations": [
-                    f"Follow-up for arrhythmia condition: {arr_res['class_name']}",
-                    f"Monitor blood pressure target: <130/80 mmHg given {risk_res['stroke_level']} stroke risk.",
-                    "Annual lipid profile & HbA1c evaluation recommended."
+                    f"Cardiology consultation recommended regarding primary finding: {arr_res['class_name']}.",
+                    f"Maintain intensive blood pressure monitoring and target <130/80 mmHg due to {risk_res['stroke_level']} stroke risk.",
+                    "Annual lipid panel evaluation, HbA1c monitoring, and lifestyle modifications recommended."
                 ]
             }
             
@@ -487,16 +685,17 @@ elif step == "4. 📄 Clinical Report":
             out_path = str(OUTPUTS_DIR / "hecar_web_clinical_report.html")
             gen.generate(report_data, out_path)
             st.session_state["report_path"] = out_path
-            st.success(f"Report Generated: `{out_path}`")
+            st.success(f"✅ Official Clinical Report Generated: `{out_path}`")
             
         if st.session_state.get("report_path") and Path(st.session_state["report_path"]).exists():
-            with open(st.session_state["report_path"], "r", encoding="utf-8") as f:
-                html_content = f.read()
-            st.download_button(
-                label="📥 Download Clinical Report (HTML)",
-                data=html_content,
-                file_name="hecar_clinical_report.html",
-                mime="text/html"
-            )
-            with st.expander("Preview Report HTML"):
-                st.components.v1.html(html_content, height=600, scrolling=True)
+            st.divider()
+            st.markdown("### 📥 Download Diagnostic Report")
+            with open(st.session_state["report_path"], "rb") as f:
+                st.download_button(
+                    label="📄 Download Medical Report (.HTML)",
+                    data=f,
+                    file_name="HECAR_Clinical_Report.html",
+                    mime="text/html",
+                    type="primary",
+                    use_container_width=True
+                )
