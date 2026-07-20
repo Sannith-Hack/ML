@@ -14,8 +14,13 @@ from pathlib import Path
 
 # ── Ensure project root is on sys.path ──────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+if str(PROJECT_ROOT) in sys.path:
+    sys.path.remove(str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
+
+# Pre-load and lock local config module into sys.modules so OpenCV (cv2/config.py) never hijacks it
+import config as _hecar_config
+sys.modules["config"] = _hecar_config
 
 # ── Bootstrap logging before any imports ────────────────────────────────────
 from config import LOG_LEVEL, LOG_FORMAT, APP_TITLE
