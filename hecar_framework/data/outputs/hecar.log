@@ -150,3 +150,8 @@
 2026-07-09 21:02:29,222 | INFO     | modules.explainability.shap_explainer | SHAP plot saved to E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\shap_plot.png
 2026-07-09 21:04:31,183 | INFO     | modules.explainability.report_generator | Report generated at E:\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\18. Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network\hecar_framework\data\outputs\report_20260709_210431.html
 2026-07-09 21:12:59,340 | INFO     | __main__ | HECAR Framework shut down.
+2026-07-20 10:07:53,365 | INFO     | __main__ | ============================================================
+2026-07-20 10:07:53,366 | INFO     | __main__ |   HECAR — Cardiac AI Diagnostic Framework
+2026-07-20 10:07:53,368 | INFO     | __main__ | ============================================================
+2026-07-20 10:09:58,801 | INFO     | __main__ | All core dependencies verified.
+2026-07-20 10:10:06,253 | INFO     | __main__ | Application started successfully.
