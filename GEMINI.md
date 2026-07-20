@@ -1,4 +1,5 @@
-﻿# Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network
+# Automated Detection of Cardiac Arrhythmia using Recurrent Neural Network
+==========================================================================
 
 ## Project Overview
 
@@ -8,32 +9,51 @@ The dataset used is the **MIT-BIH Arrhythmia Dataset**, and the system classifie
 
 ---
 
-## Project Structure
+## 🚀 Evolution to the Next-Generation Suite (`hecar_framework/`)
+
+While this root project (`Main.py`) serves as the foundational academic baseline comparing raw tabular ECG feature classification across LSTM and CNN architectures, the framework has evolved into the **HECAR Clinical Diagnostic Suite** (`hecar_framework/`), a production-grade, multi-modal medical application:
+- **Streamlit Web & Mobile Application (`hecar_framework/web_app.py`)**: Hosted on Streamlit Community Cloud (`https://sirwork.streamlit.app`) with responsive top horizontal navigation, medical glassmorphism dark-mode styling, and atomic `on_click` state callbacks.
+- **CustomTkinter Desktop Suite (`hecar_framework/main.py`)**: An 8-screen dark-mode desktop GUI for local hospital workstations.
+- **PDF & OCR Ingestion:** Instead of requiring raw CSV uploads (`arrhythmia.csv`), the modern suite directly ingests hospital ECG PDF reports (Tricog / Bhageerath format), performing OCR text parsing (`pdfplumber` + `pytesseract`) to extract digital waveform parameters (`AR`, `VR`, `QRSD`, `QT`, `QTcB`, `PRI`, and `Axis`).
+- **Multi-Modal Clinical Fusion & Risk Prognosis:** Fuses ECG parameters with **13 patient clinical variables** (`Age`, `Gender`, `Blood Pressure`, `Cholesterol`, `HbA1c`, `Habits`, and `Medical History`) across an **XGBoost** risk engine to compute **10-Year Ischemic Stroke Risk** and **10-Year Coronary Heart Disease (CAD) Risk**, complete with **SHAP explainability plots** and downloadable **HTML clinical reports**.
+
+> **Note:** For full architectural documentation of the modern multi-modal suite, please see [hecar_framework/GEMINI.md](file:///D:/User/Desktop/Sir%20Work%202.0/hecar_framework/GEMINI.md).
+
+---
+
+## Project Structure (Baseline MIT-BIH Application)
 
 ```
 project-root/
 │
-├── Main.py                  # Main application entry point (GUI + ML pipeline)
+├── Main.py                  # Main baseline application entry point (Tkinter GUI + ML pipeline)
 ├── requirements.txt         # Python dependencies (pip install commands)
 ├── run.bat                  # Windows batch script to launch the app
 ├── output.html              # Generated performance comparison table (HTML)
+├── GEMINI.md                # Project documentation (this file)
 │
 ├── Dataset/
 │   └── arrhythmia.csv       # MIT-BIH Arrhythmia Dataset (CSV format, ~4.4 MB)
 │
-└── model/                   # Saved model artifacts (auto-generated after training)
-    ├── lstm_model.json          # LSTM model architecture (JSON)
-    ├── lstm_model_weights.h5    # LSTM trained weights (H5)
-    ├── lstm_history.pckl        # LSTM training history (pickle)
-    ├── cnn_model.json           # CNN model architecture (JSON)
-    ├── cnn_model_weights.h5     # CNN trained weights (H5)
-    ├── cnn_history.pckl         # CNN training history (pickle)
-    └── pca.txt                  # PCA transformation data
+├── model/                   # Saved model artifacts (auto-generated after training)
+│   ├── lstm_model.json          # LSTM model architecture (JSON)
+│   ├── lstm_model_weights.h5    # LSTM trained weights (H5)
+│   ├── lstm_history.pckl        # LSTM training history (pickle)
+│   ├── cnn_model.json           # CNN model architecture (JSON)
+│   ├── cnn_model_weights.h5     # CNN trained weights (H5)
+│   ├── cnn_history.pckl         # CNN training history (pickle)
+│   └── pca.txt                  # PCA transformation data
+│
+└── hecar_framework/         # Next-Generation Multi-Modal Suite (Streamlit Web + CustomTkinter Desktop)
+    ├── web_app.py               # Streamlit Cloud Application (`sirwork.streamlit.app`)
+    ├── main.py                  # CustomTkinter 8-screen desktop GUI
+    ├── config.py                # Global configurations and module pre-loading definitions
+    └── GEMINI.md                # Full HECAR framework documentation
 ```
 
 ---
 
-## Technology Stack
+## Technology Stack (Baseline Application)
 
 | Category         | Technology / Library            | Version        |
 |------------------|---------------------------------|----------------|
@@ -69,9 +89,9 @@ project-root/
 
 ---
 
-## Application Workflow
+## Application Workflow (`Main.py`)
 
-The GUI provides a sequential button-based pipeline:
+The Tkinter GUI provides a sequential button-based pipeline:
 
 ```
 [Upload Dataset] -> [Preprocess Dataset] -> [Run LSTM] -> [Run CNN] -> [Graph] -> [Performance Table]
@@ -137,10 +157,11 @@ A **Seaborn heatmap** confusion matrix is plotted for each algorithm.
 ## Setup & Installation
 
 ### Prerequisites
-- Python 3.6–3.8 (recommended for TensorFlow 1.14 compatibility)
+- Python 3.6–3.8 (recommended for TensorFlow 1.14 compatibility with `Main.py`)
+- Python 3.12+ (recommended for modern `hecar_framework/` suite)
 - Windows OS (for `run.bat`)
 
-### Install Dependencies
+### Install Dependencies (Root Baseline App)
 
 ```bash
 pip install numpy==1.19.2
@@ -154,12 +175,12 @@ pip install scikit-learn==0.22.2.post1
 pip install seaborn==0.10.1
 ```
 
-> **Note:** It is strongly recommended to use a **virtual environment** to avoid version conflicts.
+> **Note:** It is strongly recommended to use separate **virtual environments** for the legacy Tkinter app (`Main.py`) and the modern Streamlit web suite (`hecar_framework/web_app.py`).
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
-# Then install all requirements above
+# Install requirements above
 ```
 
 ### Run the Application
@@ -187,7 +208,7 @@ python Main.py
 
 ## Known Issues / Compatibility Notes
 
-> **WARNING:** This project uses **TensorFlow 1.14** and **Keras 2.3.1**, which are outdated. The following APIs have been deprecated or removed in newer versions:
+> **WARNING:** The root baseline project (`Main.py`) uses **TensorFlow 1.14** and **Keras 2.3.1**, which are outdated. The following APIs have been deprecated or removed in newer versions:
 
 - `keras.utils.np_utils.to_categorical` -> use `tensorflow.keras.utils.to_categorical`
 - `lstm._make_predict_function()` -> not needed in TF 2.x
@@ -195,7 +216,7 @@ python Main.py
 - `Convolution2D` -> replaced by `Conv2D`
 - `model_from_json` -> available in `tensorflow.keras.models`
 
-> **TIP:** To upgrade to a modern TensorFlow 2.x stack, replace `import keras` with `from tensorflow import keras` and update the deprecated API calls accordingly.
+> **TIP:** For modern TensorFlow 2.x + Streamlit + XGBoost workflows, use the updated implementation inside `hecar_framework/`.
 
 ---
 
@@ -220,4 +241,4 @@ python Main.py
 
 ## Authors & Context
 
-This project was developed as an academic implementation of deep learning-based cardiac arrhythmia detection, comparing **LSTM** (a recurrent architecture ideal for sequential/time-series data) against **CNN** (a convolutional approach) on ECG feature data.
+This project was developed as an academic implementation of deep learning-based cardiac arrhythmia detection, comparing **LSTM** against **CNN** on ECG feature data. It has since expanded into the comprehensive **HECAR Framework** (`hecar_framework/`) combining PDF parsing, clinical risk fusion, and cloud deployment.
