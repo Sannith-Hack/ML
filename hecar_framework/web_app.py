@@ -3,7 +3,7 @@ HECAR Framework — Streamlit Clinical Web Application
 ======================================================
 Hybrid ECG PDF-Based Arrhythmia Classification and Cardiovascular Risk Prediction Suite.
 Features top-level responsive navigation (no sidebar required on mobile), dark glassmorphism
-medical design system, and multi-modal diagnostic workflows.
+medical design system, synchronized session state management, and multi-modal diagnostic workflows.
 """
 
 import os
@@ -46,7 +46,7 @@ st.set_page_config(
     initial_sidebar_state="auto"
 )
 
-# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges & right toolbar)
+# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges & right toolbar while keeping popovers & status intact)
 st.components.v1.html("""
 <script>
 try {
@@ -63,7 +63,6 @@ try {
                 [data-testid="stToolbar"],
                 [data-testid="stAppDeployButton"],
                 #MainMenu,
-                div[class*="StatusWidget"],
                 div[class*="viewerBadge"],
                 div[class*="ViewerBadge"],
                 div[class*="appBadge"],
@@ -72,8 +71,8 @@ try {
                 div[class*="createdBy"],
                 iframe[title*="Badge"],
                 iframe[title*="badge"],
-                iframe[style*="bottom"],
-                div[style*="position: fixed"][style*="bottom"] {
+                iframe[src*="badge"],
+                iframe[src*="streamlit.io"] {
                     display: none !important;
                     visibility: hidden !important;
                     opacity: 0 !important;
@@ -101,7 +100,6 @@ st.markdown("""
     [data-testid="stViewerBadge"],
     [data-testid="stAppBadge"],
     [data-testid="stCloudBadge"],
-    [data-testid="stStatusWidget"],
     div[class*="viewerBadge"],
     div[class*="ViewerBadge"],
     div[class*="appBadge"],
@@ -115,8 +113,6 @@ st.markdown("""
     iframe[title*="badge"],
     iframe[src*="badge"],
     iframe[src*="streamlit.io"],
-    iframe[style*="position: fixed"],
-    iframe[style*="bottom"],
     a[href*="streamlit.io/cloud"],
     a[href*="share.streamlit.io"] {
         display: none !important;
@@ -253,6 +249,8 @@ if "report_path" not in st.session_state:
     st.session_state["report_path"] = None
 if "workflow_stage" not in st.session_state:
     st.session_state["workflow_stage"] = "1. 📁 Upload & Extract ECG"
+if "top_workflow_stage" not in st.session_state:
+    st.session_state["top_workflow_stage"] = st.session_state["workflow_stage"]
 
 # Helper function to parse demo Tricog files deterministically
 @st.cache_data
@@ -262,7 +260,15 @@ def get_tricog_samples():
         return [s.name for s in pdf_files]
     return []
 
-# ── TOP-LEVEL & SIDEBAR SYNCHRONIZED NAVIGATION (No hidden mobile arrow required) ──
+# Navigation Helpers for Synchronized State Switching
+def set_stage(new_stage):
+    st.session_state["workflow_stage"] = new_stage
+    st.session_state["top_workflow_stage"] = new_stage
+
+def on_stage_change():
+    st.session_state["workflow_stage"] = st.session_state["top_workflow_stage"]
+
+# ── TOP-LEVEL & SIDEBAR SYNCHRONIZED NAVIGATION ──
 STAGE_OPTIONS = [
     "1. 📁 Upload & Extract ECG", 
     "2. 🩺 Patient Clinical Data", 
@@ -272,15 +278,15 @@ STAGE_OPTIONS = [
 
 # Top Horizontal Workflow Selector (Visible immediately on both Desktop & Mobile)
 st.write("### 🧭 Diagnostic Workflow Stage")
-step = st.radio(
+st.radio(
     "Select Stage:",
     STAGE_OPTIONS,
-    index=STAGE_OPTIONS.index(st.session_state["workflow_stage"]) if st.session_state["workflow_stage"] in STAGE_OPTIONS else 0,
     horizontal=True,
     key="top_workflow_stage",
-    label_visibility="collapsed"
+    label_visibility="collapsed",
+    on_change=on_stage_change
 )
-st.session_state["workflow_stage"] = step
+step = st.session_state["workflow_stage"]
 
 # Sidebar — Clinical Status Summary & Quick Controls
 st.sidebar.markdown("## 🏥 Clinical Status Summary")
@@ -304,15 +310,16 @@ else:
     st.sidebar.info("**AI Diagnosis:** Pending")
 
 st.sidebar.divider()
-if st.sidebar.button("🔄 Reset Diagnostic Session", type="secondary", use_container_width=True):
+def reset_session():
     st.session_state["ecg_metadata"] = {}
     st.session_state["clinical_data"] = {}
     st.session_state["arrhythmia_result"] = None
     st.session_state["risk_results"] = None
     st.session_state["shap_chart_path"] = None
     st.session_state["report_path"] = None
-    st.session_state["workflow_stage"] = "1. 📁 Upload & Extract ECG"
-    st.rerun()
+    set_stage("1. 📁 Upload & Extract ECG")
+
+st.sidebar.button("🔄 Reset Diagnostic Session", type="secondary", use_container_width=True, on_click=reset_session)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # STAGE 1: UPLOAD & EXTRACT ECG
@@ -389,8 +396,8 @@ if step == "1. 📁 Upload & Extract ECG":
         
         st.write("")
         st.write("")
-        if st.button("➔ Proceed to Step 2: Patient Clinical Data", type="primary", use_container_width=True):
-            st.session_state["workflow_stage"] = "2. 🩺 Patient Clinical Data"
+        if st.button("➔ Proceed to Step 2: Patient Clinical Data", type="primary", use_container_width=True, key="proceed_to_step2_btn"):
+            set_stage("2. 🩺 Patient Clinical Data")
             st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -403,40 +410,58 @@ elif step == "2. 🩺 Patient Clinical Data":
     meta = st.session_state.get("ecg_metadata", {})
     current_clin = st.session_state.get("clinical_data", {})
     
+    def load_preset(preset_data):
+        st.session_state["clinical_data"] = preset_data
+        st.session_state["clin_age"] = int(preset_data["age"])
+        st.session_state["clin_gender"] = preset_data["gender"]
+        st.session_state["clin_sys"] = int(preset_data["bp_systolic"])
+        st.session_state["clin_dia"] = int(preset_data["bp_diastolic"])
+        st.session_state["clin_bmi"] = float(preset_data["bmi"])
+        st.session_state["clin_hba1c"] = float(preset_data["hba1c"])
+        st.session_state["clin_chol"] = int(preset_data["cholesterol"])
+        st.session_state["clin_act"] = preset_data["physical_activity"]
+        st.session_state["clin_smoke"] = bool(preset_data["smoking"])
+        st.session_state["clin_alc"] = bool(preset_data["alcohol"])
+        st.session_state["clin_diab"] = bool(preset_data["diabetes"])
+        st.session_state["clin_hyp"] = bool(preset_data["hypertension"])
+        st.session_state["clin_heart"] = bool(preset_data["heart_disease"])
+        st.session_state["clin_stroke"] = bool(preset_data["stroke"])
+        st.session_state["clin_fam"] = bool(preset_data["family_history"])
+
     st.markdown("#### Quick Profile Presets")
     col_p1, col_p2, col_p3 = st.columns(3)
     with col_p1:
-        if st.button("🔴 Load High-Risk CAD / Stroke Profile", use_container_width=True):
-            st.session_state["clinical_data"] = {
+        if st.button("🔴 Load High-Risk CAD / Stroke Profile", use_container_width=True, key="preset_high_btn"):
+            load_preset({
                 "age": 68, "gender": "Male", "bp_systolic": 160, "bp_diastolic": 98,
                 "bmi": 31.2, "hba1c": 8.1, "cholesterol": 255, "smoking": True,
                 "alcohol": True, "physical_activity": "Low", "diabetes": True,
                 "hypertension": True, "heart_disease": True, "stroke": False,
                 "family_history": True
-            }
-            st.success("High-risk profile loaded!")
+            })
+            st.success("High-risk profile loaded across all fields!")
             st.rerun()
     with col_p2:
-        if st.button("🟡 Load Moderate Risk Patient Profile", use_container_width=True):
-            st.session_state["clinical_data"] = {
+        if st.button("🟡 Load Moderate Risk Patient Profile", use_container_width=True, key="preset_med_btn"):
+            load_preset({
                 "age": 54, "gender": "Female", "bp_systolic": 138, "bp_diastolic": 88,
                 "bmi": 26.8, "hba1c": 6.2, "cholesterol": 215, "smoking": False,
                 "alcohol": True, "physical_activity": "Moderate", "diabetes": False,
                 "hypertension": True, "heart_disease": False, "stroke": False,
                 "family_history": True
-            }
-            st.success("Moderate-risk profile loaded!")
+            })
+            st.success("Moderate-risk profile loaded across all fields!")
             st.rerun()
     with col_p3:
-        if st.button("🟢 Load Normal Healthy Patient Profile", use_container_width=True):
-            st.session_state["clinical_data"] = {
+        if st.button("🟢 Load Normal Healthy Patient Profile", use_container_width=True, key="preset_low_btn"):
+            load_preset({
                 "age": 35, "gender": "Male", "bp_systolic": 118, "bp_diastolic": 76,
                 "bmi": 22.4, "hba1c": 5.2, "cholesterol": 175, "smoking": False,
                 "alcohol": False, "physical_activity": "High", "diabetes": False,
                 "hypertension": False, "heart_disease": False, "stroke": False,
                 "family_history": False
-            }
-            st.success("Normal profile loaded!")
+            })
+            st.success("Normal profile loaded across all fields!")
             st.rerun()
 
     st.write("")
@@ -484,7 +509,7 @@ elif step == "2. 🩺 Patient Clinical Data":
                 "smoking": smoking, "alcohol": alcohol, "diabetes": diabetes, "hypertension": hypertension,
                 "heart_disease": heart_disease, "stroke": stroke, "family_history": family_history
             }
-            st.session_state["workflow_stage"] = "3. 🧠 Run AI Diagnosis"
+            set_stage("3. 🧠 Run AI Diagnosis")
             st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -634,7 +659,7 @@ elif step == "3. 🧠 Run AI Diagnosis":
 
         st.write("")
         if st.button("➔ Proceed to Step 4: Generate Clinical Report", type="primary", use_container_width=True, key="to_step4_btn"):
-            st.session_state["workflow_stage"] = "4. 📄 Clinical Report"
+            set_stage("4. 📄 Clinical Report")
             st.rerun()
 
 # ─────────────────────────────────────────────────────────────────────────────
