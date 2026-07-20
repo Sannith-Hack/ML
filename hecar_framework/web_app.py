@@ -48,6 +48,50 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges in parent window)
+st.components.v1.html("""
+<script>
+try {
+    const parentDoc = window.parent.document;
+    const topDoc = window.top.document;
+    [parentDoc, topDoc].forEach(doc => {
+        if (!doc) return;
+        let style = doc.getElementById('hecar-watermark-destroyer');
+        if (!style) {
+            style = doc.createElement('style');
+            style.id = 'hecar-watermark-destroyer';
+            style.innerHTML = `
+                /* Destroy Streamlit Community Cloud mobile/desktop parent bottom bars */
+                header[data-testid="stHeader"],
+                div[class*="StatusWidget"],
+                div[class*="viewerBadge"],
+                div[class*="ViewerBadge"],
+                div[class*="appBadge"],
+                div[class*="AppBadge"],
+                div[class*="hostedWithStreamlit"],
+                div[class*="createdBy"],
+                iframe[title*="Badge"],
+                iframe[title*="badge"],
+                iframe[style*="bottom"],
+                div[style*="position: fixed"][style*="bottom"] {
+                    display: none !important;
+                    visibility: hidden !important;
+                    opacity: 0 !important;
+                    height: 0 !important;
+                    width: 0 !important;
+                    pointer-events: none !important;
+                    z-index: -999999 !important;
+                }
+            `;
+            doc.head.appendChild(style);
+        }
+    });
+} catch (e) {
+    console.log("Streamlit cross-origin wrapper notice:", e);
+}
+</script>
+""", height=0, width=0)
+
 # Custom Styling & Watermark Removal
 st.markdown("""
 <style>
