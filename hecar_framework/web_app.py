@@ -193,10 +193,11 @@ step = st.sidebar.radio(
 )
 
 # Helper function to parse demo Tricog files if available
-@st.cache_resource
+@st.cache_data
 def get_tricog_samples():
     if Path(TRICOG_DATA_DIR).exists():
-        return list(Path(TRICOG_DATA_DIR).glob("*.pdf"))
+        pdf_files = sorted(list(Path(TRICOG_DATA_DIR).glob("*.pdf")))
+        return [s.name for s in pdf_files]
     return []
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -205,11 +206,16 @@ def get_tricog_samples():
 if step == "1. 📁 Upload & Extract ECG":
     st.header("Step 1: Ingest Hospital ECG Report")
     
-    upload_method = st.radio("Choose Input Method:", ["Upload PDF Report", "Select Sample from Tricog Directory"], horizontal=True)
+    upload_method = st.radio(
+        "Choose Input Method:", 
+        ["Upload PDF Report", "Select Sample from Tricog Directory"], 
+        horizontal=True,
+        key="ecg_upload_method"
+    )
     
     pdf_file_path = None
     if upload_method == "Upload PDF Report":
-        uploaded_file = st.file_uploader("Upload ECG PDF Report (Tricog / Bhageerath format)", type=["pdf"])
+        uploaded_file = st.file_uploader("Upload ECG PDF Report (Tricog / Bhageerath format)", type=["pdf"], key="ecg_pdf_uploader")
         if uploaded_file is not None:
             # Save temporary file for processing
             temp_path = OUTPUTS_DIR / uploaded_file.name
@@ -219,15 +225,20 @@ if step == "1. 📁 Upload & Extract ECG":
             pdf_file_path = str(temp_path)
             st.success(f"File uploaded: `{uploaded_file.name}`")
     else:
-        samples = get_tricog_samples()
-        if samples:
-            selected_sample = st.selectbox("Select sample ECG PDF:", [s.name for s in samples])
+        sample_names = get_tricog_samples()
+        if sample_names:
+            selected_sample = st.selectbox(
+                "Select sample ECG PDF:", 
+                sample_names, 
+                key="tricog_pdf_selectbox",
+                help="Pick any ECG report from the demo Tricog directory"
+            )
             pdf_file_path = str(Path(TRICOG_DATA_DIR) / selected_sample)
             st.info(f"Using sample file: `{selected_sample}`")
         else:
             st.warning("No sample PDFs found in TRICOG_DATA_DIR folder.")
 
-    if pdf_file_path and st.button("Extract ECG Parameters (OCR + Text Parsing)", type="primary"):
+    if pdf_file_path and st.button("Extract ECG Parameters (OCR + Text Parsing)", type="primary", key="extract_ecg_btn"):
         with st.spinner("Running PDF Loader & OCR Extraction..."):
             loader = PDFLoader()
             ocr = OCRExtractor()
