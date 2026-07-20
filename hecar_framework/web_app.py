@@ -48,7 +48,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges in parent window)
+# Parent-Window JavaScript DOM Destroyer (Hides mobile and cloud wrapper badges while preserving mobile sidebar toggle)
 st.components.v1.html("""
 <script>
 try {
@@ -61,8 +61,10 @@ try {
             style = doc.createElement('style');
             style.id = 'hecar-watermark-destroyer';
             style.innerHTML = `
-                /* Destroy Streamlit Community Cloud mobile/desktop parent bottom bars */
-                header[data-testid="stHeader"],
+                /* Destroy Streamlit Community Cloud mobile/desktop parent bottom bars & right toolbar */
+                [data-testid="stToolbar"],
+                [data-testid="stAppDeployButton"],
+                #MainMenu,
                 div[class*="StatusWidget"],
                 div[class*="viewerBadge"],
                 div[class*="ViewerBadge"],
@@ -189,7 +191,8 @@ if "report_path" not in st.session_state:
 st.sidebar.header("📋 Workflow Navigation")
 step = st.sidebar.radio(
     "Select Stage:",
-    ["1. 📁 Upload & Extract ECG", "2. 🩺 Patient Clinical Data", "3. 🧠 Run AI Diagnosis", "4. 📄 Clinical Report"]
+    ["1. 📁 Upload & Extract ECG", "2. 🩺 Patient Clinical Data", "3. 🧠 Run AI Diagnosis", "4. 📄 Clinical Report"],
+    key="workflow_stage_radio"
 )
 
 # Helper function to parse demo Tricog files if available

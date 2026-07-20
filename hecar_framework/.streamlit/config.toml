@@ -9,8 +9,5 @@ font = "sans serif"
 maxUploadSize = 200
 enableCORS = true
 
-[ui]
-hideTopBar = true
-
 [client]
 toolbarMode = "minimal"
